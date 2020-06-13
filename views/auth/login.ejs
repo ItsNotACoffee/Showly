@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('../includes/favicon_import.ejs') %>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title %></title>
+    <%- include('../includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('../includes/navigation.ejs') %>
+        <div class="<%= loggedIn ? 'form_container slide-handler' : 'form_container expand-grid' %>">
+            <% if (messageType != 0) { %>
+            <div class="msg-board">
+                <% if (messageType == 2) { %>
+                <div class="bubble-logo">
+                    <img alt="happy_face" src="/resources/happy.png" width="150" height="150">
+                </div>
+                <% } else { %>
+                <div class="bubble-logo">
+                    <img alt="sad_face" src="/resources/not_found.png" width="150" height="150">
+                </div>
+                <% } %>
+                <div class="bubble">
+                    <p><%= message ? message : '' %></p>
+                </div>
+            </div>
+            <% } %>
+            <div class="login-form">
+                <form action="/login" name="loginForm" method="POST">
+                    <div class="form-input">
+                        <label for="email">E-Mail: </label>
+                    </div>
+                    <div class="form-input">
+                        <input type="email" name="email">
+                    </div>
+                    <div class="form-input">
+                        <label for="password">Password: </label>
+                    </div>
+                    <div class="form-input">
+                        <input type="password"name="password">
+                    </div>
+                    <div class="form-input">
+                        <button class="btn-form loginBtn" name="loginBtn" type="submit">LOGIN</button>
+                    </div>
+                    <div class="form-input" style="margin-top: 15px;">
+                        <a class="link-btn-form" href="/register">REGISTER</a>
+                    </div>
+                    <div class="form-input">
+                        <a class="btn-link" href="/reset">Forgot password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+    <script>
+        window.onload = function() {
+            history.replaceState("", "", "/login");
+        }
+    </script>
+</body>
+
+</html>

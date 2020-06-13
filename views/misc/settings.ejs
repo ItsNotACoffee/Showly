@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('../includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('../includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('../includes/navigation.ejs') %>
+        <div class="settings-container slide-handler">
+            <% if (messageType != 0) { %>
+                <div class="msg-board">
+                    <% if (messageType == 2) { %>
+                    <div class="bubble-logo">
+                        <img alt="happy_face" src="/resources/happy.png" width="150" height="150">
+                    </div>
+                    <% } else { %>
+                    <div class="bubble-logo">
+                        <img alt="sad_face" src="/resources/not_found.png" width="150" height="150">
+                    </div>
+                    <% } %>
+                    <div class="bubble">
+                        <p><%= message ? message : '' %></p>
+                    </div>
+                </div>
+            <% } %>
+                <form action="/settings" method="POST" enctype="multipart/form-data">
+                    <div class="settings-image">
+                        <div class="pfpurl">
+                            <img src="/<%= user.profileUrl ? user.profileUrl : 'resources/default_pfp.png' %>" alt="pfp">
+                        </div>
+                        <div>
+                            <div id="filelabel" class="form-input">
+                                <label for="file">Choose an image:</label>
+                            </div>
+                            <div class="form-input">
+                                <input type="file" name="image">
+                            </div>
+                            <div class="<%= user.profileUrl ? 'form-input settings-btn' : 'hidden' %>">
+                                <button type="submit" class="btn-form">REMOVE PHOTO</button>
+                                <input type="hidden" name="removeProfile" value="<%= user.profileUrl ? 1 : 0 %>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-divider"></div>
+                    <div class="settings-resetpass">
+                        <div>
+                            <a class="link-btn-settings" href="/reset">RESET PASSWORD</a>
+                        </div>
+                    </div>
+                    <div class="settings-divider1"></div>
+                    <div class="settings-info">
+                        <div class="form-input">
+                            <label for="name">Name: </label>
+                        </div>
+                        <div class="form-input">
+                            <input type="text" name="name" value="<%= user.name != null ? user.name : '' %>">
+                        </div>
+                        <div class="form-input">
+                            <label for="surname">Surname: </label>
+                        </div>
+                        <div class="form-input">
+                            <input type="text" name="surname" value="<%= user.surname != null ? user.surname : '' %>">
+                        </div>
+                        <div class="form-input">
+                            <label for="gender">Gender: </label>
+                        </div>
+                        <div class="form-input">
+                            <select name="gender" id="gender">
+                                <option value="0" <%- user.gender != null ? '' : 'selected' %>>Select a gender</option>
+                                <option value="1" <%- user.gender == 1 ? 'selected' : '' %>>Male</option>
+                                <option value="2" <%- user.gender == 2 ? 'selected' : '' %>>Female</option>
+                            </select>
+                        </div>
+                        <div class="form-input">
+                            <label for="birthday">Birthday: </label>
+                        </div>
+                        <div class="form-input">
+                            <input type="date" name="birthday" value="<%= user.birthday != null ? user.birthday : '' %>">
+                        </div>
+                        <div class="form-input">
+                            <label for="Residence">Residence: </label>
+                        </div>
+                        <div class="form-input">
+                            <input type="text" name="residence" value="<%= user.residence != null ? user.residence : '' %>">
+                        </div>
+                    </div>
+                    <div class="form-input settings-btn">
+                        <button type="submit" class="btn-form">SAVE</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

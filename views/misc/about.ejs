@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('../includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('../includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('../includes/navigation.ejs') %>
+        <div class="about-container slide-handler">
+            <div class="about">
+                <div class="about-title">
+                    <h2>About Showly</h2>
+                </div>
+                <div class="about-text">
+                    <div class="about-img">
+                        <img src="/resources/important.png" alt="important">
+                    </div>
+                    <p>The simplest, good-looking, darkmode app made for tracking your favorite shows and movie data!
+                        Made throughout weeks of coffee-induced thinking and fixing the design to make it look just right! 
+                        Special thanks to the IMDb API plugin team which made this possible, credits below.
+                    </p>
+                </div>
+                <div class="about-title">
+                    <h2>About me (the author)</h2>
+                </div>
+                <div class="about-text2">
+                    <div class="about-img2">
+                        <img src="/resources/wrench.png" alt="wrench">
+                    </div>
+                    <div class="about-longtext">
+                        <p>Just a guy in college that knows a little bit of front-end programming and has some free time (not really).
+                            I'm no design-guy so if anything looks off, its probably why.
+                            I'm currently studying IT and mostly program in Java and javascript (Nodejs, Angular, Extjs) but I sometimes do a bit of C# and C++
+                        </p>
+                        <br>
+                        <p>
+                            This is one of the projects that helped me learn Nodejs and its different but useful modules.
+                            I am quite proud how it turned out so please use it, don't let my hours spent on centering objects in CSS go to waste :(
+                        </p>
+                    </div>
+                </div>
+                <div class="about-title">
+                    <h2>Credits</h2>
+                </div>
+                <div class="about-text">
+                    <div class="about-img">
+                        <img src="/resources/notepad.png" alt="important">
+                    </div>
+                    <div class="about-longtext2">
+                        <div>
+                            <h4>OMDb API</h4>
+                            <p>API by Brian Fritz. Licensed under CC BY-NC 4.0.</p>
+                            <a href="http://www.omdbapi.com/legal.htm" style="color: #d50000;"> < Legal > </a>
+                            <a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color: #d50000;"> < License > </a>
+                            <br>
+                            <br>
+                            <h4>List of modules (Licensed under MIT):</h4>
+                            <p>nodemon, express, mysql2, body-parser, imdb-api, bcryptjs, express-session, express-mysql-session, nodemailer, moment, multer, connect-flash</p>
+                            <a href="https://opensource.org/licenses/MIT" style="color: #d50000;"> < License > </a>
+                            <br>
+                            <br>
+                            <h4>List of modules (Licensed under Apache 2.0):</h4>
+                            <p>ejs</p>
+                            <a href="https://opensource.org/licenses/MIT" style="color: #d50000;"> < License > </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-divider">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

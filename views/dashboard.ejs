@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('./includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('./includes/css_import.ejs') %>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('./includes/navigation.ejs') %>
+        <div class="dashboard-container slide-handler">
+            <div class="dashboard-cards">
+                <div class="dashboard-card1">
+                    <div class="general-title">
+                        <h2>General Info</h3>
+                    </div>
+                    <div class="general-pfp">
+                        <div class="pfpurl">
+                            <img src="/<%= user.profileUrl ? user.profileUrl : 'resources/default_pfp.png' %>" alt="pfp">
+                        </div>
+                        <div class="general-pfpinfo">
+                            <div class="general-divwrap">
+                                <h3><%= user.name ? (user.surname ? user.name + ' ' + user.surname : user.name) : '' %></h3>
+                                <% if (user.gender != 0 && user.gender != null) { %>
+                                    <img id="genderpfp" src="<%= user.gender == '1' ? '/resources/gender_male.png' : (user.gender == '2' ? '/resources/gender_female.png' : '') %>" alt="gndr">
+                                <% } %>
+                            </div>
+                            <p><%= user.residence ? user.residence : '' %></p>
+                            <div class="general-divwrap">
+                                <% if (user.age != null) { %>
+                                    <p>Age: </p>
+                                    <h3 id="userage" style="color: #d50000;"><%= user.age ? user.age : '' %></h3>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="general-stats">
+                        <div class="general-totalshows">
+                            <h3>Total watched: </h3>
+                            <h3 class="stats-style"><%= generalStats.totalShows %></h3>
+                        </div>
+                        <div class="general-totaleps">
+                            <h3>Total episodes watched: </h3>
+                            <h3 class="stats-style"><%= generalStats.totalEps %></h3>
+                        </div>
+                        <div class="general-dayswatched">
+                            <h3>Days watched: </h3>
+                            <h3 class="stats-style"><%= generalStats.daysWatched %></h3>
+                        </div>
+                        <div class="general-genres">
+                            <h3>Favorite genres: </h3>
+                            <div id="genres">
+                                <% if (generalStats.genres.length > 0) { %>
+                                    <% if (generalStats.genres.length < 4) { %>
+                                        <% for (var i=0; i < generalStats.genres.length; i++) { %>
+                                            <% if (i < generalStats.genres.length - 1) { %>
+                                                <p><%= generalStats.genres[i].genre + ', '%></p>
+                                            <% } else { %>
+                                                <p><%= generalStats.genres[i].genre %></p>
+                                            <% } %>
+                                        <% } %>
+                                    <% } else { %>
+                                        <% for (var i=0; i < 4; i++) { %>
+                                            <% if (i < 3) { %>
+                                                <p><%= generalStats.genres[i].genre + ', '%></p>
+                                            <% } else { %>
+                                                <p><%= generalStats.genres[i].genre %></p>
+                                            <% } %>
+                                        <% } %>
+                                    <% } %>
+                                <% } else { %>
+                                    <p>None :(</p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-card2">
+                    <div class="toprated-title">
+                        <h2>Top rated from your watchlist</h3>
+                    </div>
+                    <div class="top-rated">
+                        <% if (ratings.length > 0) { %>
+                            <% for(var i=0; i < (ratings.length < 5 ? ratings.length : 5); i++) { %>
+                                <div>
+                                    <h3 style="color: #d50000;"><%= i+1 + '.'%></h3>
+                                    <p><%= ratings[i].name + ' - (' + ratings[i].rating + ')' %></p>
+                                </div>
+                            <% } %>
+                        <% } else { %>
+                            <p>None :(</p>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="dashboard-card3">
+                    <div class="chart-title">
+                        <h2>Status of your watchlist</h3>
+                    </div>
+                    <div id="chart" data-total="<%= wlChart[4] %>">
+                        <div class="chart-completed">
+                            <h3>Completed - <%= wlChart[0] %> </h3>
+                            <div id="chart-line-completed" data-percentage="<%= wlChart[0] %>"></div>
+                        </div>
+                        <div class="chart-watching">
+                            <h3>Watching - <%= wlChart[1] %> </h3>
+                            <div id="chart-line-watching" data-percentage="<%= wlChart[1] %>"></div>
+                        </div>
+                        <div class="chart-plantowatch">
+                            <h3>Plan to watch - <%= wlChart[2] %></h3>
+                            <div id="chart-line-plantowatch" data-percentage="<%= wlChart[2] %>"></div>
+                        </div>
+                        <div class="chart-dropped">
+                            <h3>Dropped - <%= wlChart[3] %> </h3>
+                            <div id="chart-line-dropped" data-percentage="<%= wlChart[3] %>"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dashboard-cardlist">
+                <div class="cardlist-title" style="color: #64dd17;">
+                    <a class="link-btn-dashboard" href="/watchlist?type=watching">⬅</a>
+                    <h2 style="margin-left: 2rem;">Currently watching</h2>
+                </div>
+                <div class="cardlist">
+                    <% if (watching.length > 0) { %>
+                        <% for (let show of watching) { %>
+                            <a href="/shows/id/<%= show.imdbId %>">
+                                <div class="list-item">
+                                    <div class="card-title">
+                                        <h3>
+                                            <%= show.name %>
+                                        </h3>
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="<%= show.poster == 'N/A' ? '/resources/no_poster.png': show.poster %>" alt="<%= show.title %>">
+                                    </div>
+                                </div>
+                            </a>
+                        <% } %>
+                    <% } else { %>
+                        <h1>No movies/shows to display...</h1>
+                    <% } %>
+                </div>
+            </div>
+            <div class="dashboard-cardlist2">
+                <div class="cardlist-title" style="color: #ffeb3b;">
+                    <a class="link-btn-dashboard" href="/watchlist?type=plantowatch">⬅</a>
+                    <h2 style="margin-left: 2rem;">Wondering what to watch next?</h2>
+                </div>
+                <div class="cardlist">
+                    <% if (planto.length > 0) { %>
+                        <% for (let show of planto) { %>
+                            <a href="/shows/id/<%= show.imdbId %>">
+                                <div class="list-item">
+                                    <div class="card-title">
+                                        <h3>
+                                            <%= show.name %>
+                                        </h3>
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="<%= show.poster == 'N/A' ? '/resources/no_poster.png': show.poster %>" alt="<%= show.title %>">
+                                    </div>
+                                </div>
+                            </a>
+                        <% } %>
+                    <% } else { %>
+                        <h1>No movies/shows to display...</h1>
+                    <% } %>
+                </div>
+            </div>
+            <div class="dashboard-end"></div>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+    <script> setChartData() </script>
+</body>
+
+</html>

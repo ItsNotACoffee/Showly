@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('./includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('./includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('./includes/navigation.ejs') %>
+        <main class="<%= loggedIn ? 'main_container slide-handler' : 'main_container expand-grid' %>">
+            <div class="translucent item-centergrid centered">
+                <h1 style="color: #d50000; margin-top: 30px;">PAGE NOT FOUND</h1>
+                <img alt="sad_face" id="errorimg" src="/resources/not_found.png">
+            </div>
+        </main>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

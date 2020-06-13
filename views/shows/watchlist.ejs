@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('../includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('../includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('../includes/navigation.ejs') %>
+        <div class="<%= loggedIn ? 'watchlist-container slide-handler' : 'watchlist-container expand-grid' %>">
+            <div class="watchlist-tools">
+                <ul>
+                    <form action="/watchlist" method="GET">
+                        <li><button class="<%= lastType == 'all' ? 'active-top active-top-silver btn-link' : 'btn-link glow-top glow-top-silver' %>" type="submit">ALL</button></li>
+                        <input type="hidden" name="type" value="all">
+                    </form>
+                    <form action="/watchlist" method="GET">
+                        <li><button class="<%= lastType == 'watching' ? 'active-top active-top-green btn-link' : 'btn-link glow-top glow-top-green' %>" type="submit">WATCHING</button></li>
+                        <input type="hidden" name="type" value="watching">
+                    </form>
+                    <form action="/watchlist" method="GET">
+                        <li><button class="<%= lastType == 'plantowatch' ? 'active-top active-top-yellow btn-link' : 'btn-link glow-top glow-top-yellow' %>" type="submit">PLAN TO WATCH</button></li>
+                        <input type="hidden" name="type" value="plantowatch">
+                    </form>
+                    <form action="/watchlist" method="GET">
+                        <li><button class="<%= lastType == 'completed' ? 'active-top active-top-blue btn-link' : 'btn-link glow-top glow-top-blue' %>" type="submit">COMPLETED</button></li>
+                        <input type="hidden" name="type" value="completed">
+                    </form>
+                    <form action="/watchlist" method="GET">
+                        <li><button class="<%= lastType == 'dropped' ? 'active-top active-top-red btn-link' : 'btn-link glow-top glow-top-red' %>" type="submit">DROPPED</button></li>
+                        <input type="hidden" name="type" value="dropped">
+                    </form>
+                </ul>
+            </div>
+            <div class="watchlist-showcontainer">
+                <div class="watchlist-filter">
+                    <div class="watchlist-filter-actions">
+                        <div>
+                            <h3>Sort by: </h3>
+                        </div>
+                        <div>
+                            <form action="/watchlist">
+                                <button class="<%= lastSort == 'title' ? 'btn-selected' : 'btn-misc' %>" name="sortby" value="title" type="submit"><%= lastSort == 'title' ? (sortDir != '' ? (sortDir == 'desc' ? 'Title ▼' : 'Title ▲') : 'Title') : 'Title' %></button>
+                                <input type="hidden" name="dir" value="<%= lastSort == 'title' ? (sortDir != '' ? sortDir : 'desc') : 'desc' %>">
+                                <input type="hidden" name="type" value="<%= lastType != '' ? lastType : '' %>">
+                            </form>
+                        </div>
+                        <div>
+                            <form action="/watchlist">
+                                <button class="<%= lastSort == 'genre' ? 'btn-selected' : 'btn-misc' %>" name="sortby" value="genre" type="submit"><%= lastSort == 'genre' ? (sortDir != '' ? (sortDir == 'desc' ? 'Genre ▼' : 'Genre ▲') : 'Genre') : 'Genre' %></button>
+                                <input type="hidden" name="dir" value="<%= lastSort == 'genre' ? (sortDir != '' ? sortDir : 'desc') : 'desc' %>">
+                                <input type="hidden" name="type" value="<%= lastType != '' ? lastType : '' %>">
+                            </form>
+                        </div>
+                        <div>
+                            <form action="/watchlist">
+                                <button class="<%= lastSort == 'progress' ? 'btn-selected' : 'btn-misc' %>" name="sortby" value="progress" type="submit"><%= lastSort == 'progress' ? (sortDir != '' ? (sortDir == 'desc' ? 'Progress ▼' : 'Progress ▲') : 'Progress') : 'Progress' %></button>
+                                <input type="hidden" name="dir" value="<%= lastSort == 'progress' ? (sortDir != '' ? sortDir : 'desc') : 'desc' %>">
+                                <input type="hidden" name="type" value="<%= lastType != '' ? lastType : '' %>">
+                            </form>
+                        </div>
+                        <div>
+                            <form action="/watchlist">
+                                <button class="<%= lastSort == 'startdate' ? 'btn-selected' : 'btn-misc' %>" name="sortby" value="startdate" type="submit"><%= lastSort == 'startdate' ? (sortDir != '' ? (sortDir == 'desc' ? 'Start date ▼' : 'Start date ▲') : 'Start date') : 'Start date' %></button>
+                                <input type="hidden" name="dir" value="<%= lastSort == 'startdate' ? (sortDir != '' ? sortDir : 'desc') : 'desc' %>">
+                                <input type="hidden" name="type" value="<%= lastType != '' ? lastType : '' %>">
+                            </form>
+                        </div>
+                        <div>
+                            <form action="/watchlist">
+                                <button class="<%= lastSort == 'rating' ? 'btn-selected' : 'btn-misc' %>" name="sortby" value="rating" type="submit"><%= lastSort == 'rating' ? (sortDir != '' ? (sortDir == 'desc' ? 'Rating ▼' : 'Rating ▲') : 'Rating') : 'Rating' %></button>
+                                <input type="hidden" name="dir" value="<%= lastSort == 'rating' ? (sortDir != '' ? sortDir : 'desc') : 'desc' %>">
+                                <input type="hidden" name="type" value="<%= lastType != '' ? lastType : '' %>">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="watchlist-pages">
+                        <form action="/watchlist">
+                            <input type="hidden" name="type" value="<%= lastType != '' ? lastType : '' %>">
+                            <% if (lastSort != '') { %>
+                                <input type="hidden" name="sortby" value="<%= lastSort != '' ? lastSort : '' %>">
+                            <% } %>
+                            <% if (sortDir != '') { %>
+                                <input type="hidden" name="dir" value="<%= sortDir != '' ? sortDir : '' %>">
+                            <% } %>
+                            <div>
+                                <% if (lastPage > 1) { %>
+                                    <button class="btn-misc" name="page" value="<%= parseInt(lastPage) - 1 %>" type="submit">⮜</button>
+                                <% } %>
+                                <% if ((maxPages-lastPage) > 0) { %>
+                                        <button class="btn-misc" name="page" value="<%= parseInt(lastPage) + 1 %>" type="submit">⮞</button>
+                                <% } %>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="watchlist-shows">
+                    <% var counter = 0; %>
+                    <% for (let show of shows) { %>
+                        <% if (show.type == 'movie') { %>
+                            <div class="watchlist-item status <%= show.status == 1 ? 'status-blue' : (show.status == 2 ? 'status-green' : (show.status == 3 ? 'status-yellow' : (show.status == 4 ? 'status-red' : ''))) %>">
+                                <div class="watchlist-title">
+                                    <a href="/shows/id/<%= show.imdbId %>" class="red-hover">
+                                        <h4 class="fix-margin"><%= show.name %></h4>
+                                    </a>
+                                </div>
+                                <div class="watchlist-tags">
+                                    <p><%= show.tags %></p>
+                                </div>
+                                <div class="watchlist-progress empty">
+                                    -
+                                </div>
+                                <div class="watchlist-dates">
+                                    <div>
+                                        <p style="margin-right: 5px; color: #999999;">Started:</p>
+                                        <p class="<%= show.startDate ? '' : 'empty' %>"><%= show.startDate ? show.startDate : '-' %></p>
+                                    </div>
+                                    <div>
+                                        <p style="margin-right: 5px; color: #999999;">Completed:</p>
+                                        <p class="<%= show.endDate ? '' : 'empty' %>"><%= show.endDate ? show.endDate : '-' %></p>
+                                    </div>
+                                </div>
+                                <div class="watchlist-rating">
+                                    <p class="watchlist-subheading">Rating:</p>
+                                    <p class="<%= show.rating ? '' : 'empty' %>"><%= show.rating ? show.rating : '-' %></p>
+                                </div>
+                                <div class="watchlist-actions">
+                                    <a href="/watchlist/edit/<%= show.imdbId + '?b=wl' %>" class="red-hover">Edit</a>
+                                    <form action="/watchlist/del" onSubmit="return confirm('Are you sure you want to remove this from your watchlist?');" method="POST">
+                                        <button class="btn-link red-hover" type="submit">Delete</button>
+                                        <input type="hidden" name="imdbid" value="<%= show.imdbId %>">
+                                        <input type="hidden" name="id" value="<%= show.watchlistEntryId %>">
+                                    </form>
+                                </div>
+                            </div>
+                        <% } else if (show.type == 'series') { %>
+                            <div class="watchlist-item status <%= show.status == 1 ? 'status-blue' : (show.status == 2 ? 'status-green' : (show.status == 3 ? 'status-yellow' : (show.status == 4 ? 'status-red' : ''))) %>">
+                                <div class="watchlist-title">
+                                    <div class="clickable">
+                                        <span class="link-spanner-dropdown" id="<%= 'ws' + counter %>"></span>
+                                        <i class="arrow arrow-right"></i>
+                                        <a href="/shows/id/<%= show.imdbId %>" class="red-hover">
+                                            <h4><%= show.name %></h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="watchlist-tags">
+                                    <p><%= show.tags %></p>
+                                </div>
+                                <div class="watchlist-progress">
+                                    <p class="watchlist-subheading">Progress:</p>
+                                    <p><%= show.episodesWatched + '/' + show.totalEpisodes %></p>
+                                </div>
+                                <div class="watchlist-dates">
+                                    <div>
+                                        <p style="margin-right: 5px; color: #999999;">Started:</p>
+                                        <p class="<%= show.startDate ? '' : 'empty' %>"><%= show.startDate ? show.startDate : '-' %></p>
+                                    </div>
+                                    <div>
+                                        <p style="margin-right: 5px; color: #999999;">Completed:</p>
+                                        <p class="<%= show.endDate ? '' : 'empty' %>"><%= show.endDate ? show.endDate : '-' %></p>
+                                    </div>
+                                </div>
+                                <div class="watchlist-rating">
+                                    <p class="watchlist-subheading">Rating:</p>
+                                    <p class="<%= show.rating ? '' : 'empty' %>"><%= show.rating ? show.rating : '-' %></p>
+                                </div>
+                                <div class="watchlist-actions">
+                                    <a href="/watchlist/edit/<%= show.imdbId + '?b=wl' %>" class="red-hover">Edit</a>
+                                    <form action="/watchlist/del" onSubmit="return confirm('Are you sure you want to remove this from your watchlist?');" method="POST">
+                                        <button class="btn-link red-hover" type="submit">Delete</button>
+                                        <input type="hidden" name="imdbid" value="<%= show.imdbId %>">
+                                        <input type="hidden" name="id" value="<%= show.watchlistEntryId %>">
+                                    </form>
+                                </div>
+                            </div>
+                            <% if (show.seasons != null) { %>
+                                <div class="hidden-list hidden watchlist-item-seasons" id="<%= 'ws' + counter + '_lst'%>">
+                                    <% for (let season of show.seasons) { %>
+                                        <div class="watchlist-item-season status <%= season.status == 1 ? 'status-blue' : (season.status == 2 ? 'status-green' : (season.status == 3 ? 'status-yellow' : (season.status == 4 ? 'status-red' : ''))) %>">
+                                            <div class="wl-season-title">
+                                                <h4 class="fix-margin">Season <%= season.season %></h4>
+                                            </div>
+                                            <div class="wl-season-progress">
+                                                <p class="wl-progress-subheading watchlist-subheading">Progress:</p>
+                                                <p><%= season.episode ? season.episode : '0'%> <%='/' + season.maxEpisode %></p>
+                                            </div>
+                                            <div class="wl-season-datesl1">
+                                                <p style="margin-right: 5px; color: #999999;">Started:</p>
+                                                <p class="<%= season.startDate ? '' : 'empty' %>"><%= season.startDate ? season.startDate : '-' %></p>
+                                            </div>
+                                            <div class="wl-season-datesl2">
+                                                <p style="margin-right: 5px; color: #999999;">Completed:</p>
+                                                <p class="<%= season.endDate ? '' : 'empty' %>"><%= season.endDate ? season.endDate : '-' %></p>
+                                            </div>
+                                            <div class="wl-season-rating">
+                                                <p class="wl-rating-subheading watchlist-subheading">Rating:</p>
+                                                <p class="<%= season.rating ? '' : 'empty' %>"><%= season.rating ? season.rating : '-' %></p>
+                                            </div>
+                                            <div class="wl-season-actions isDisabled">
+                                                <a href="/watchlist/edit/<%= show.imdbId + '?s=' + season.season + '?b=wl' %>" class="red-hover">Edit</a>
+                                                <form action="/watchlist/del" onSubmit="return confirm('Are you sure you want to remove this from your watchlist?');" method="POST">
+                                                    <button class="btn-link red-hover" type="submit">Delete</button>
+                                                    <input type="hidden" name="imdbid" value="<%= show.imdbId %>">
+                                                    <input type="hidden" name="id" value="<%= season.watchlistSeasonId %>">
+                                                    <input type="hidden" name="season" value="<%= season.season %>">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                        <% } %>
+                        <% counter = counter + 1 %>
+                    <% } %>
+                </div>
+                <div class="watchlist-end">
+                </div>
+            </div>
+            <div class="watchlist-end">
+            </div>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

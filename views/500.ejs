@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('./includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('./includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('./includes/navigation.ejs') %>
+        <main class="<%= loggedIn ? 'main_container slide-handler' : 'main_container expand-grid' %>">
+            <div class="translucent item-centergrid centered">
+                <h1 style="color: #d50000; margin-top: 30px;">A SERVER-SIDE ERROR HAS OCCURED!</h1>
+                <h1 style="color: #d50000; margin-top: 30px;">REST ASSURED, I'M WORKING ON IT!</h1>
+                <img alt="error" id="errorimg" src="/resources/error.png">
+            </div>
+        </main>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

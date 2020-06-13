@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('../includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('../includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('../includes/navigation.ejs') %>
+        <div class="<%= loggedIn ? 'detail-container slide-handler' : 'detail-container expand-grid' %>">
+            <div class="edit-info">
+                <div class="edit-title">
+                    <h2><%= season != null ? (show.name + ' Season ' +  season.season) : show.name%></h2>
+                </div>
+                <div class="edit-cancel red-hover">
+                    <% if (back) { %>
+                        <a href="/watchlist">✖</a>
+                    <% } else { %>
+                        <a href="/shows/id/<%= show.imdbId %>">✖</a>
+                    <% } %>
+                </div>
+                <div class="edit-poster">
+                    <img src="<%= show.poster == 'N/A' ? '/resources/no_poster.png': show.poster %>" alt="<%= show.title %>">
+                </div>
+                <form action="/watchlist/edit" method="POST">
+                    <div class="edit-values">
+                        <div>
+                            <label for="status">Status: </label>
+                            <select id="status" name="status">
+                                <option value="1" <%- season != null ? (season.status == 1 ? 'selected' : '') : (show.status == 1 ? 'selected' : '') %>>Completed</option>
+                                <option value="2" <%- season != null ? (season.status == 2 ? 'selected' : '') : (show.status == 2 ? 'selected' : '') %>>Watching</option>
+                                <option value="3" <%- season != null ? (season.status == 3 ? 'selected' : '') : (show.status == 3 ? 'selected' : '') %>>Plan To Watch</option>
+                                <option value="4" <%- season != null ? (season.status == 4 ? 'selected' : '') : (show.status == 4 ? 'selected' : '') %>>Dropped</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="rating">Rating: </label>
+                            <select id="rating" name="rating">
+                                <option value="0" <%- season != null ? (season.rating == 0 ? 'selected' : '') : (show.rating == 0 ? 'selected' : '') %>>-</option>
+                                <option value="1" <%- season != null ? (season.rating == 1 ? 'selected' : '') : (show.rating == 1 ? 'selected' : '') %>>1 - Horrible</option>
+                                <option value="2" <%- season != null ? (season.rating == 2 ? 'selected' : '') : (show.rating == 2 ? 'selected' : '') %>>2 - Very Bad</option>
+                                <option value="3" <%- season != null ? (season.rating == 3 ? 'selected' : '') : (show.rating == 3 ? 'selected' : '') %>>3 - Bad</option>
+                                <option value="4" <%- season != null ? (season.rating == 4 ? 'selected' : '') : (show.rating == 4 ? 'selected' : '') %>>4 - Below Average</option>
+                                <option value="5" <%- season != null ? (season.rating == 5 ? 'selected' : '') : (show.rating == 5 ? 'selected' : '') %>>5 - Average</option>
+                                <option value="6" <%- season != null ? (season.rating == 6 ? 'selected' : '') : (show.rating == 6 ? 'selected' : '') %>>6 - Okay</option>
+                                <option value="7" <%- season != null ? (season.rating == 7 ? 'selected' : '') : (show.rating == 7 ? 'selected' : '') %>>7 - Good</option>
+                                <option value="8" <%- season != null ? (season.rating == 8 ? 'selected' : '') : (show.rating == 8 ? 'selected' : '') %>>8 - Very Good</option>
+                                <option value="9" <%- season != null ? (season.rating == 9 ? 'selected' : '') : (show.rating == 9 ? 'selected' : '') %>>9 - Great</option>
+                                <option value="10" <%- season != null ? (season.rating == 10 ? 'selected' : '') : (show.rating == 10 ? 'selected' : '') %>>10 - Perfect</option>
+                            </select>
+                        </div>
+                        <div class="<%= season != null ? 'episode' : 'hidden' %>">
+                            <label for="episode">On episode:</label>
+                            <div>
+                                <input type="number" name="episode" id="episode" min="0" max="<%= season != null ? season.maxEpisode : '' %>" value="<%= season != null ? (season.episode != null ? season.episode : '0') : '0' %>">
+                                <p> / <%= season != null ? season.maxEpisode : '' %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="edit-values-right">
+                        <div>
+                            <label for="startDate">Started on: </label>
+                            <input type="date" name="startDate" id="startDate" value="<%= season != null ? (season.startDate != null ? season.startDate : null) : (show.startDate != null ? show.startDate : null) %>">
+                        </div>
+                        <div>
+                            <label for="endDate">Completed on: </label>
+                            <input type="date" name="endDate" id="endDate" value="<%= season != null ? (season.endDate != null ? season.endDate : null) : (show.endDate != null ? show.endDate : null) %>">
+                        </div>
+                    </div>
+                    <div class="<%= season != null ? 'hidden' : 'edit-comment' %>">
+                        <label for="comment">Comment: </label>
+                        <textarea name="comment" id="comment"><%= show.comment != null ? show.comment : '' %></textarea>
+                    </div>
+                    <div class="edit-actions">
+                        <div>
+                            <button class="btn-misc" type="submit">SAVE</button>
+                            <input type="hidden" name="id" value="<%= season != null ? (season.watchlistSeasonId + '_s=' + season.season) : show.watchlistEntryId %>">
+                            <input type="hidden" name="imdbid" value="<%= show.imdbId %>">
+                            <input type="hidden" name="back" value="<%= back ? back : '' %>">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="loggedIn" value="<%= loggedIn ? '1' : '0' %>">
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

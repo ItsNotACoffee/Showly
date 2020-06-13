@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('../includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('../includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('../includes/navigation.ejs') %>
+        <div class="<%= loggedIn ? 'search slide-handler' : 'search expand-grid' %>">
+            <div class="search-actions">
+                <form action="/shows/search">
+                    <div class="search-type">
+                        <button class="<%= lastType == 'movie' ? 'btn-selected' : 'btn-misc' %>" name="type" value="movie" type="submit">Movies</button>
+                        <button class="<%= lastType == 'series' ? 'btn-selected' : 'btn-misc' %>" style="margin-left: 6px;" name="type" value="series" type="submit">Series</button>
+                    </div>
+                    <input type="hidden" name="str" value="<%= lastQuery != '' ? lastQuery : '' %>">
+                    <input type="hidden" name="page" value="1">
+                </form>
+                <form action="/shows/search">
+                    <input type="hidden" name="type" value="<%= lastType != '' ? lastType : '' %>">
+                    <input type="hidden" name="str" value="<%= lastQuery != '' ? lastQuery : '' %>">
+                    <div class="search-page">
+                        <% if (lastPage > 3 && maxPages > 5) { %>
+                            <button class="btn-misc" name="page" value="1" type="submit">⮜</button>
+                        <% } %>
+
+                        <% if (maxPages < 6) { %>
+                            <% for (var i = 1; i <= maxPages; i++) { %>
+                                <button class="<%= lastPage == i ? 'btn-selected' : 'btn-misc' %>" name="page" value="<%= i %>" type="submit"><%= i %></button>
+                            <% } %>
+                        <% } else { %>
+                            <% if (lastPage <= 3) { %>
+                                <% for (var i = 1; i <= 5; i++) { %>
+                                    <button class="<%= lastPage == i ? 'btn-selected' : 'btn-misc' %>" name="page" value="<%= i %>" type="submit"><%= i %></button>
+                                <% } %>
+                            <% } else if (lastPage > 3 && (maxPages-lastPage) > 2) { %>
+                                <% for (var i = lastPage - 2; i <= parseInt(lastPage) + 2; i++) { %>
+                                    <button class="<%= lastPage == i ? 'btn-selected' : 'btn-misc' %>" name="page" value="<%= i %>" type="submit"><%= i %></button>
+                                <% } %>
+                            <% } else if (lastPage > 3 && (maxPages-lastPage) == 2) { %>
+                                <% for (var i = lastPage - 2; i <= maxPages; i++) { %>
+                                    <button class="<%= lastPage == i ? 'btn-selected' : 'btn-misc' %>" name="page" value="<%= i %>" type="submit"><%= i %></button>
+                                <% } %>
+                            <% } else if (lastPage > 3 && (maxPages-lastPage) == 1) { %>
+                                <% for (var i = lastPage - 3; i <= parseInt(lastPage) + 1; i++) { %>
+                                    <button class="<%= lastPage == i ? 'btn-selected' : 'btn-misc' %>" name="page" value="<%= i %>" type="submit"><%= i %></button>
+                                <% } %>
+                            <% } else if (lastPage > 3 && (maxPages-lastPage) == 0) { %>
+                                <% for (var i = lastPage - 4; i <= lastPage; i++) { %>
+                                    <button class="<%= lastPage == i ? 'btn-selected' : 'btn-misc' %>" name="page" value="<%= i %>" type="submit"><%= i %></button>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+
+                        <% if ((maxPages - lastPage) > 2 && maxPages > 5) { %>
+                                <button class="btn-misc" name="page" value="<%= maxPages %>" type="submit">⮞</button>
+                        <% } %>
+                    </div>
+                </form>
+            </div>
+            <div class="search_container">
+                    <% if (shows.length > 0) { %>
+                        <% for (let show of shows) { %>
+                            <a href="/shows/id/<%= show.imdbid %>">
+                                <div class="search-item">
+                                    <div class="card-title">
+                                        <h3>
+                                            <%= show.title %> (<%= show.year %>)
+                                        </h3>
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="<%= show.poster == 'N/A' ? '/resources/no_poster.png': show.poster %>" alt="<%= show.title %>">
+                                    </div>
+                                </div>
+                            </a>
+                        <% } %>
+                    <% } else { %>
+                        <% if (msgType == 'TooManyResults') { %>
+                            <h1>Too many results, be more specific</h1>
+                        <% } else if (msgType == 'NotFound' || msgType == '') { %>
+                            <h1>No results :(</h1>
+                        <% } %>
+                    <% } %>
+            </div>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

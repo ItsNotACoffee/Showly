@@ -1,0 +1,51 @@
+<header>
+    <div class="top_navbar">
+        <div class="top_menu">
+            <div class="tools-collection">
+                <div class="<%= loggedIn ? 'hamburger' : 'hide' %>">
+                    <div class="top"></div>
+                    <div></div>
+                    <div class="bottom"></div>
+                </div>
+                <div class="logo"><a href="/"><img alt="Showly" src="/resources/showly_logo.png"></a></div>
+                <div class="div-search">
+                    <form class="search-form" action="/shows/search">
+                        <input type="hidden" name="type" value="movie">
+                        <input class="searchbar" type="text" name="str" placeholder="Search..."
+                            value="<%= lastQuery != '' ? lastQuery : '' %>">
+                        <input type="hidden" name="page" value="1">
+                    </form>
+                </div>
+            </div>
+            <ul>
+                <form action="/signout" method="POST">
+                    <li class="<%= loggedIn ? '' : 'hide' %>"><button class="btn-link glow-top" type="submit">Sign Out</button></li>
+                </form>
+                <li class="<%= loggedIn ? 'hide' : '' %>"><a class="<%= path === '/login' ? 'active-top' : 'glow-top' %>" href="/login">Login</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+<div class="<%= loggedIn ? 'sidebar' : 'hide' %>">
+    <ul>
+        <li class="<%= loggedIn ? '' : 'hide' %>"><a href="/dashboard" id="l1" class="<%= path === '/dashboard' ? 'active-side' : 'glow-side' %>">
+                <span class="icon" id="ico1"><i class="material-icons">chrome_reader_mode</i></span>
+                <span class="title hide" id="ttl1">DASHBOARD</span>
+            </a></li>
+        <li class="<%= loggedIn ? '' : 'hide' %>"><a href="/watchlist" id="l2" class="<%= path === '/watchlist' ? 'active-side' : 'glow-side' %>">
+                <span class="icon" id="ico2"><i class="material-icons">list</i></span>
+                <span class="title hide" id="ttl2">WATCHLIST</span>
+            </a></li>
+        <li class="<%= loggedIn ? '' : 'hide' %>"><a href="/settings" id="l3" class="<%= path === '/settings' ? 'active-side' : 'glow-side' %>">
+                <span class="icon" id="ico3"><i class="material-icons">settings</i></span>
+                <span class="title hide" id="ttl3">SETTINGS</span>
+            </a></li>
+        <li class="<%= loggedIn ? '' : 'hide' %>"><a href="/about" id="l4" class="<%= path === '/about' ? 'active-side' : 'glow-side' %>">
+                <span class="icon" id="ico4"><i class="material-icons">info</i></span>
+                <span class="title hide" id="ttl4">ABOUT</span>
+            </a></li>
+    </ul>
+    <div id="legal" class="hide">
+        <p>This site is not endorsed by or affiliated with IMDb.com</p>
+    </div>
+</div>

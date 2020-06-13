@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('../includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('../includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('../includes/navigation.ejs') %>
+        <div class="<%= loggedIn ? 'detail-container slide-handler' : 'detail-container expand-grid' %>">
+            <div class="detail-info">
+                <div class="detail-title">
+                    <h2><%= show.title %></h2>
+                </div>
+                <div class="detail-poster">
+                    <img src="<%= show.poster == 'N/A' ? '/resources/no_poster.png': show.poster %>" alt="<%= show.title %>">
+                </div>
+                <div class="detail-actions">
+                    <div>
+                        <form action="/watchlist/add" method="POST">
+                            <button class="<%= loggedIn ? (showAdded ? 'btn-misc-dsbl' : 'btn-misc') : 'form-input hidden' %>" type="submit" <%- showAdded ? 'disabled' : '' %>><%= showAdded ? '✔ ADDED' : 'ADD TO WATCHLIST' %></button>
+                            <input type="hidden" name="imdbid" value="<%= show.imdbid%>">
+                        </form>
+                    </div>
+                    <div>
+                        <a class="<%= loggedIn ? (showAdded ? 'link-btn-details' : 'hidden') : 'hidden' %>" href="/watchlist/edit/<%= show.imdbid %>">EDIT</a>
+                    </div>
+                </div>
+                <div class="detail-shortinfo">
+                    <div>
+                        <h3>Runtime:  </h3>
+                        <p><%= show.runtime %></p>
+                    </div>
+                    <div>
+                        <h3>Year:  </h3>
+                        <p><%= show.year %></p>
+                    </div>
+                    <div>
+                        <h3>Genre:  </h3>
+                        <p><%= show.genres %></p>
+                    </div>
+                    <div>
+                        <h3>Rated:  </h3>
+                        <p class="r-rated"><%= show.rated %></p>
+                    </div>
+                    <div>
+                        <h3>Actor/s:  </h3>
+                        <p><%= show.actors %></p>
+                    </div>
+                    <div>
+                        <h3>Director/s:  </h3>
+                        <p><%= show.director %></p>
+                    </div>
+                </div>
+                <div class="detail-ratings">
+                    <% for (let rating of ratings) { %>
+                        <% if (rating.source == 'Internet Movie Database') { %>
+                            <div>
+                                <% if (rating.color == 'red') { %>
+                                    <h3>IMDb:  </h3>
+                                    <p style="color: #d50000;"><%= rating.rating %></p>
+                                <% } else if (rating.color == 'yellow') { %>
+                                    <h3>IMDb:  </h3>
+                                    <p style="color: #ffea00;"><%= rating.rating %></p>
+                                <% } else if (rating.color == 'green') { %>
+                                    <h3>IMDb:  </h3>
+                                    <p style="color: #76ff03;"><%= rating.rating %></p>
+                                <% } %>
+                            </div>
+                        <% } else if (rating.source == 'Rotten Tomatoes') { %>
+                            <div>
+                                <% if (rating.color == 'red') { %>
+                                    <h3>Rotten Tomatoes:  </h3>
+                                    <p style="color: #d50000;"><%= rating.rating %></p>
+                                <% } else if (rating.color == 'yellow') { %>
+                                    <h3>Rotten Tomatoes:  </h3>
+                                    <p style="color: #ffea00;"><%= rating.rating %></p>
+                                <% } else if (rating.color == 'green') { %>
+                                    <h3>Rotten Tomatoes:  </h3>
+                                    <p style="color: #76ff03;"><%= rating.rating %></p>
+                                <% } %>
+                            </div>
+                        <% } else if (rating.source == 'Metacritic') { %>
+                            <div>
+                                <% if (rating.color == 'red') { %>
+                                    <h3>Metacritic:  </h3>
+                                    <p style="color: #d50000;"><%= rating.rating %></p>
+                                <% } else if (rating.color == 'yellow') { %>
+                                    <h3>Metacritic:  </h3>
+                                    <p style="color: #ffea00;"><%= rating.rating %></p>
+                                <% } else if (rating.color == 'green') { %>
+                                    <h3>Metacritic:  </h3>
+                                    <p style="color: #76ff03;"><%= rating.rating %></p>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    <% } %>
+                </div>
+                <div class="detail-plot">
+                    <h3>Plot: </h3>
+                    <p>
+                        <%= show.plot %>
+                    </p>
+                </div>
+            </div>
+            <div class="<%= loggedIn ? (showAdded ? 'divider' : 'hidden') : 'hidden' %>"></div>
+            <div class="<%= loggedIn ? (showAdded ? 'detail-userinfo' : 'hidden') : 'hidden' %> <%= show.series == true ? '' : 'fixmargindetails' %>" >
+                <div class="userinfo-title">
+                    <h2>Your Stats</h2>
+                </div>
+                <div class="userinfo-left">
+                    <div>
+                        <h3>Status: </h3>
+                        <p><%= show._userInfo ? (show._userInfo.status ? (show._userInfo.status == 1 ? 'Completed' : (show._userInfo.status == 2 ? 'Watching' : (show._userInfo.status == 3 ? 'Plan to watch' : (show._userInfo.status == 4 ? 'Dropped' : '')))) : '') : '' %></p>
+                    </div>
+                    <div>
+                        <h3>Rating: </h3>
+                        <p><%= show._userInfo ? (show._userInfo.rating ? show._userInfo.rating : '-') : '' %></p>
+                    </div>
+                </div>
+                <div class="userinfo-middle">
+                    <div>
+                        <h3>Progress: </h3>
+                        <p><%= show.type == 'series' ? (show._userInfo ? (show._userInfo._episodesWatched + '/' + show._userInfo._maxEpisodes) : '') : 'N/A' %></p>
+                    </div>
+                </div>
+                <div class="userinfo-right">
+                    <div>
+                        <h3>Started on: </h3>
+                        <p><%= show._userInfo ? (show._userInfo.startDate) : '' %></p>
+                    </div>
+                    <div>
+                        <h3>Completed on: </h3>
+                        <p><%= show._userInfo ? (show._userInfo.endDate) : '' %></p>
+                    </div>
+                </div>
+                <div class="userinfo-divider"></div>
+                <div class="userinfo-comment">
+                    <h3>Comment: </h3>
+                    <p><%= show._userInfo ? (show._userInfo.comment ? show._userInfo.comment : '') : '' %></p>
+                </div>
+            </div>
+            <div class="<%= show.series == true ? 'divider' : 'hidden' %>"></div>
+            <div class="<%= show.series == true ? (showAdded ? 'episode-list' : 'episode-list episode-list-fixedarea') : 'hidden' %>">
+                <div class="episode-title">
+                    <h2>Seasons</h2>
+                </div>
+                <div class="episode-tools">
+                    <div>
+                        <select id="seasons" name="seasons" class="form-input">
+                            <option value="0">Choose Season</option>
+                            <% for (var i=1; i <= show.totalseasons; i++) { %>
+                                <option value="<%= i %>"><%= 'Season ' + i %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="episode-tools-refs">
+                        <form action="/watchlist/add-seasons" class="form-input" method="POST">
+                            <button class="<%= loggedIn ? 'btn-misc hidden' : 'hidden' %>" style="margin-top: 0;" type="submit" id="addseasontowatchlist">ADD S TO WATCHLIST</button>
+                            <input type="hidden" name="imdbid" value="<%= show.imdbid%>">
+                            <input type="hidden" name="selectedseason">
+                        </form>
+                        <div>
+                            <a class="hidden link-btn-details" id="editSeason" href="">EDIT</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="episodes hidden" id="episodes">
+                    <div class="tr th" name="theader">
+                        <div class="td" style="flex-grow: 0.2;">
+                            Episode
+                        </div>
+                        <div class="td" style="flex-grow: 2;">
+                            Title
+                        </div>
+                        <div class="td" style="flex-grow: 1;">
+                            Release Date
+                        </div>
+                        <div class="td" style="flex-grow: 0.2;">
+                            Rating
+                        </div>
+                    </div>
+                    <% for (var i=1; i <= show.totalseasons; i++) { %>
+                        <div name="<%= addedSeasons ? (addedSeasons.includes(i) ? 'addeds'+i : 's'+i) : 's'+i %>" class="hidden">
+                            <% for (let episode of show._episodes) { %>
+                                <% if (episode.season == i && episode.name != null) { %>
+                                    <div class="tr" name="<%= 's' + i %>" id="<%= 's' + i + 'e' + episode.episode %>">
+                                        <div class="td" style="flex-grow: 0.2;"><%= episode.episode %></div>
+                                        <div class="td" style="flex-grow: 2;"><%= episode.title %></div>
+                                        <div class="td" style="flex-grow: 1;"><%= episode.released %></div>
+                                        <div class="td" style="flex-grow: 0.2;"><%= episode.rating %></div>
+                                    </div>
+                                <% } %>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="loggedIn" value="<%= loggedIn ? '1' : '0' %>">
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

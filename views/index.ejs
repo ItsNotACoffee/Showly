@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include('./includes/favicon_import.ejs') %>
+    <title><%= title %></title>
+    <%- include('./includes/css_import.ejs') %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('./includes/navigation.ejs') %>
+        <main class="<%= loggedIn ? 'main_container slide-handler' : 'main_container expand-grid' %>">
+            <div class="landing-page">
+                <div class="landing-text">
+                    <div class="landing-div">
+                        <div>
+                            <img id="landinglogo" alt="Showly" src="/resources/showly_logo.png">
+                        </div>
+                        <div class="text-landing-div">
+                            <h1>Awesomeness awaits, get started by registering!</h1>
+                        </div>
+                        <a href="/register" class="link-btn-landing">REGISTER NOW!</a>
+                    </div>
+                </div>
+                <div class="image-container">
+                    <img src="/resources/laptop.png" alt="landing">
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/main.js"></script>
+    <script>
+        window.onload = function() {
+            document.body.onselectstart = function() {
+                return false;
+            }
+        }
+    </script>
+</body>
+
+</html>
