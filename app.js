@@ -63,6 +63,7 @@ app.use((req, res, next) => {
     res.locals.lastQuery = '';
     res.locals.lastType = '';
     res.locals.lastPage = '';
+    res.locals.errorType = '';
 
     //misc
     res.locals.token = '';

@@ -82,9 +82,9 @@
                             </a>
                         <% } %>
                     <% } else { %>
-                        <% if (msgType == 'TooManyResults') { %>
+                        <% if (errorType == 'TooManyResults') { %>
                             <h1>Too many results, be more specific</h1>
-                        <% } else if (msgType == 'NotFound' || msgType == '') { %>
+                        <% } else if (errorType == 'NotFound' || msgType == '') { %>
                             <h1>No results :(</h1>
                         <% } %>
                     <% } %>
